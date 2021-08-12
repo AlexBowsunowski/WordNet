@@ -1,7 +1,5 @@
 package sourcecode;
 
-
-import java.net.Inet4Address;
 import java.util.HashMap;
 
 import edu.princeton.cs.algs4.Bag;
@@ -48,14 +46,18 @@ public class WordNet {
 
     // distance between nounA and nounB (defined below)
     public int distance(String nounA, String nounB){
+        if(isNoun(nounA) || isNoun(nounB)) throw new IllegalArgumentException("Argument is null");
 
-        return 0;
+        return sap.length(sMap.get(nounA), sMap.get(nounB));
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB){
-        return null;
+        if(isNoun(nounA) || isNoun(nounB)) throw new IllegalArgumentException("Argument is null");
+        SAP sap = new SAP(wordNet);
+        int ancestor = sap.ancestor(sMap.get(nounA), sMap.get(nounB));
+        return sSet.get(ancestor);
     }
 
 
