@@ -13,7 +13,7 @@ public class WordNet {
     private final HashMap<String, Bag<Integer>> sMap;
     // sSet contains pairs noun as key and String as value that consists of synset noun
     private final HashMap<Integer, String> sSet;
-    private final SAP sap;
+    private final SAP sapObject;
 
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
@@ -26,7 +26,7 @@ public class WordNet {
         // Check that WordNet is a rooted DAG
         DirectedCycle check = new DirectedCycle(wordNet);
         if (check.hasCycle()) throw new IllegalArgumentException("Digraph has cycle.");
-        sap = new SAP(wordNet);
+        sapObject = new SAP(wordNet);
         // Check that WordNet is singly rooted DAG
         int root = 0;
         for (int i = 0; i < count; ++i)
@@ -49,14 +49,13 @@ public class WordNet {
     public int distance(String nounA, String nounB) {
         if (isNoun(nounA) || isNoun(nounB)) throw new IllegalArgumentException("Argument is null");
 
-        return sap.length(sMap.get(nounA), sMap.get(nounB));
+        return sapObject.length(sMap.get(nounA), sMap.get(nounB));
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
         if (isNoun(nounA) || isNoun(nounB)) throw new IllegalArgumentException("Argument is null");
-        SAP sapObject = new SAP(wordNet);
         int ancestor = sapObject.ancestor(sMap.get(nounA), sMap.get(nounB));
         return sSet.get(ancestor);
     }
